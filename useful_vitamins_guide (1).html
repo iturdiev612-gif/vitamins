@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ru" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaVibe - Полезные Витамины & Забота о Здоровье</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cutePink: '#FF85A1',
+                        cutePeach: '#FBB13C',
+                        cutePurple: '#B39DDB',
+                        cuteGreen: '#A8E6CF',
+                        cuteDarkBg: '#1A1B2F',
+                        cuteDarkCard: '#26294A'
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Light Cute Background */
+        body.light {
+            background: linear-gradient(135deg, #fff0f5 0%, #e6f0ff 50%, #fff7e6 100%);
+            background-attachment: fixed;
+            color: #2D3748;
+        }
+
+        /* Dark Cozy Background */
+        body.dark {
+            background: linear-gradient(135deg, #18192A 0%, #1F223D 50%, #291D38 100%);
+            background-attachment: fixed;
+            color: #F7FAFC;
+        }
+
+        /* Float Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Pulse Soft Glow */
+        @keyframes softGlow {
+            0%, 100% { box-shadow: 0 5px 15px rgba(255, 133, 161, 0.2); }
+            50% { box-shadow: 0 10px 25px rgba(255, 133, 161, 0.4); }
+        }
+
+        .cute-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cute-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            animation: softGlow 2s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF85A1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="light min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/70 dark:bg-slate-900/80 border-b border-pink-100 dark:border-purple-900/40 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-400 to-amber-400 flex items-center justify-center text-white text-xl font-bold shadow-md transform group-hover:rotate-12 transition-transform">
+                    💊
+                </div>
+                <span class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-pink-500 via-purple-500 to-amber-500 bg-clip-text text-transparent">
+                    VitaVibe
+                </span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-6 font-semibold text-sm">
+                <a href="#catalog" data-i18n="navCatalog" class="hover:text-pink-500 transition-colors">Каталог</a>
+                <a href="#quiz" data-i18n="navQuiz" class="hover:text-pink-500 transition-colors">Подбор Витаминов</a>
+                <a href="#tracker" data-i18n="navTracker" class="hover:text-pink-500 transition-colors">Мой Трекер</a>
+            </nav>
+
+            <!-- Controls (Theme & Lang) -->
+            <div class="flex items-center gap-3">
+                
+                <!-- Language Switcher -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-100 dark:bg-purple-900/50 hover:bg-pink-200 dark:hover:bg-purple-800/60 text-xs font-bold transition-all shadow-sm">
+                    <i class="fa-solid fa-globe text-pink-500 dark:text-purple-300"></i>
+                    <span id="currentLangLabel">RU</span>
+                </button>
+
+                <!-- Theme Switcher -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-amber-100 dark:bg-slate-800 text-amber-500 dark:text-yellow-300 flex items-center justify-center hover:scale-110 transition-all shadow-sm">
+                    <i id="themeIcon" class="fa-solid fa-sun text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 text-center relative overflow-hidden">
+        <div class="inline-block px-4 py-1.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-pink-600 dark:text-pink-300 font-bold text-xs sm:text-sm mb-4 animate-bounce">
+            ✨ <span data-i18n="heroBadge">Твой милый гид по витаминам!</span> ✨
+        </div>
+        
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+            <span data-i18n="heroTitle1">Будь полным энергии &</span> <br class="hidden sm:inline"/>
+            <span class="bg-gradient-to-r from-pink-500 to-amber-500 bg-clip-text text-transparent" data-i18n="heroTitle2">здоровым каждый день! 🌸</span>
+        </h1>
+
+        <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-sm sm:text-base font-medium mb-8" data-i18n="heroDesc">
+            Узнай всё про суперсила полезных микроэлементов, найди то, чего не хватает твоему организму, и добавь полезные привычки в свою жизнь!
+        </p>
+
+        <!-- Cute Decorative Floating Icons -->
+        <div class="hidden lg:block absolute left-10 top-1/4 text-4xl animate-float">🥑</div>
+        <div class="hidden lg:block absolute right-12 top-1/3 text-4xl animate-float" style="animation-delay: 1s;">🍊</div>
+        <div class="hidden lg:block absolute left-20 bottom-10 text-4xl animate-float" style="animation-delay: 2s;">☀️</div>
+        <div class="hidden lg:block absolute right-24 bottom-12 text-4xl animate-float" style="animation-delay: 1.5s;">🫐</div>
+    </section>
+
+    <!-- Search & Filters Section -->
+    <section id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-pink-100 dark:border-slate-700/60">
+            
+            <!-- Search Bar -->
+            <div class="relative max-w-xl mx-auto mb-6">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-pink-400"></i>
+                <input type="text" id="searchInput" oninput="filterVitamins()" placeholder="Поиск витаминов (например, Витамин С, Цинк)..." data-i18n-placeholder="searchPlaceholder" class="w-full pl-11 pr-4 py-3 rounded-2xl bg-pink-50/50 dark:bg-slate-900/60 border border-pink-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm font-medium transition-all">
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-3" id="categoryFilters">
+                <button onclick="setCategory('all')" class="cat-btn active px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-500 text-white shadow-md" data-category="all" data-i18n="catAll">🌟 Все</button>
+                <button onclick="setCategory('immunity')" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300" data-category="immunity" data-i18n="catImmunity">🛡️ Иммунитет</button>
+                <button onclick="setCategory('energy')" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300" data-category="energy" data-i18n="catEnergy">⚡ Энергия</button>
+                <button onclick="setCategory('bones')" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300" data-category="bones" data-i18n="catBones">🦴 Кости & Зубы</button>
+                <button onclick="setCategory('beauty')" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300" data-category="beauty" data-i18n="catBeauty">✨ Кожа & Красота</button>
+                <button onclick="setCategory('brain')" class="cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300" data-category="brain" data-i18n="catBrain">🧠 Мозг & Память</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vitamin Cards Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div id="vitaminGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Cards will be dynamically inserted here via JS -->
+        </div>
+    </section>
+
+    <!-- Interactive Quiz Finder Section -->
+    <section id="quiz" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 dark:from-slate-800 dark:via-purple-950 dark:to-slate-900 rounded-3xl p-6 sm:p-10 shadow-xl border border-pink-200 dark:border-purple-800/40 relative">
+            
+            <div class="text-center mb-8">
+                <span class="text-3xl">🔮</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-2" data-i18n="quizTitle">Витаминный Экспресс-Тест</h2>
+                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1" data-i18n="quizSubtitle">Ответь на простой вопрос и узнай, какой витамин тебе сейчас нужен!</p>
+            </div>
+
+            <div id="quizContent" class="space-y-4">
+                <p class="font-bold text-base sm:text-lg text-center" data-i18n="quizQuestion">Как ты себя чувствуешь в последнее время?</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
+                    <button onclick="solveQuiz('fatigue')" class="p-4 rounded-2xl bg-white dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-purple-800 text-left font-semibold text-sm transition-all shadow-sm flex items-center gap-3">
+                        <span class="text-2xl">😴</span>
+                        <span data-i18n="qOpt1">Постоянная усталость и слабость</span>
+                    </button>
+                    <button onclick="solveQuiz('immunity')" class="p-4 rounded-2xl bg-white dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-purple-800 text-left font-semibold text-sm transition-all shadow-sm flex items-center gap-3">
+                        <span class="text-2xl">🤧</span>
+                        <span data-i18n="qOpt2">Часто простужаюсь и болею</span>
+                    </button>
+                    <button onclick="solveQuiz('skin')" class="p-4 rounded-2xl bg-white dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-purple-800 text-left font-semibold text-sm transition-all shadow-sm flex items-center gap-3">
+                        <span class="text-2xl">💅</span>
+                        <span data-i18n="qOpt3">Сухая кожа или ломаются ногти</span>
+                    </button>
+                    <button onclick="solveQuiz('stress')" class="p-4 rounded-2xl bg-white dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-purple-800 text-left font-semibold text-sm transition-all shadow-sm flex items-center gap-3">
+                        <span class="text-2xl">🤯</span>
+                        <span data-i18n="qOpt4">Стресс и плохой сон</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Result Modal Content -->
+            <div id="quizResult" class="hidden text-center space-y-4">
+                <div class="text-4xl" id="quizIcon">💊</div>
+                <h3 class="text-xl font-bold" id="quizResultTitle">Тебе подойдет...</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 max-w-md mx-auto" id="quizResultDesc"></p>
+                <button onclick="resetQuiz()" class="px-6 py-2.5 rounded-2xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-sm shadow-md transition-all" data-i18n="quizRetry">
+                    Пройти снова 🔄
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Daily Vitamin Tracker / Bookmarks Section -->
+    <section id="tracker" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-12">
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-xl border border-pink-100 dark:border-slate-700">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+                        <span>⭐</span> <span data-i18n="trackerTitle">Мои Заметки & Избранное</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400" data-i18n="trackerDesc">Сохраняй витамины, чтобы не забыть принимать ежедневно!</p>
+                </div>
+                <span id="favCountBadge" class="bg-pink-500 text-white font-extrabold text-xs px-3 py-1 rounded-full shadow-sm">0</span>
+            </div>
+
+            <div id="favList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Favorites list injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Popup for Detailed Info -->
+    <div id="vitaminModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl transform scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
+            
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700 hover:bg-pink-100 text-gray-500 dark:text-gray-300 flex items-center justify-center font-bold text-lg">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-4 mb-4">
+                <div id="modalEmoji" class="w-16 h-16 rounded-2xl bg-pink-100 dark:bg-purple-900/40 flex items-center justify-center text-3xl shadow-sm">
+                    🍋
+                </div>
+                <div>
+                    <h3 id="modalName" class="text-2xl font-black"></h3>
+                    <span id="modalCategory" class="inline-block px-3 py-0.5 rounded-full text-xs font-bold bg-pink-100 text-pink-600 dark:bg-purple-900 dark:text-purple-300"></span>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs sm:text-sm">
+                <div>
+                    <h4 class="font-extrabold text-pink-500 flex items-center gap-1 mb-1">
+                        <i class="fa-solid fa-heart"></i> <span data-i18n="modalBenefits">Польза для здоровья:</span>
+                    </h4>
+                    <p id="modalBenefitsText" class="text-gray-600 dark:text-gray-300 leading-relaxed"></p>
+                </div>
+
+                <div>
+                    <h4 class="font-extrabold text-amber-500 flex items-center gap-1 mb-1">
+                        <i class="fa-solid fa-apple-whole"></i> <span data-i18n="modalSources">Природные источники:</span>
+                    </h4>
+                    <p id="modalSourcesText" class="text-gray-600 dark:text-gray-300 leading-relaxed"></p>
+                </div>
+
+                <div>
+                    <h4 class="font-extrabold text-purple-500 flex items-center gap-1 mb-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="modalDeficiency">Симптомы дефицита:</span>
+                    </h4>
+                    <p id="modalDeficiencyText" class="text-gray-600 dark:text-gray-300 leading-relaxed"></p>
+                </div>
+
+                <div class="p-3 rounded-2xl bg-pink-50 dark:bg-slate-900/60 border border-pink-100 dark:border-slate-700">
+                    <span class="font-extrabold text-gray-700 dark:text-gray-200" data-i18n="modalDose">Суточная норма:</span>
+                    <span id="modalDoseText" class="text-pink-600 dark:text-pink-300 font-bold ml-1"></span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2.5 rounded-2xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-xs shadow-md transition-all" data-i18n="modalClose">
+                    Понятно! ✨
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white/60 dark:bg-slate-900/60 border-t border-pink-100 dark:border-slate-800 py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p data-i18n="footerText">❤️ Сделано с любовью к вашему здоровью. Контент носит ознакомительный характер.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Language Translations
+        const translations = {
+            ru: {
+                navCatalog: "Каталог",
+                navQuiz: "Подбор Витаминов",
+                navTracker: "Мой Трекер",
+                heroBadge: "Твой милый гид по витаминам!",
+                heroTitle1: "Будь полным энергии &",
+                heroTitle2: "здоровым каждый день! 🌸",
+                heroDesc: "Узнай всё про суперсила полезных микроэлементов, найди то, чего не хватает твоему организму, и добавь полезные привычки в свою жизнь!",
+                searchPlaceholder: "Поиск витаминов (например, Витамин С, Цинк)...",
+                catAll: "🌟 Все",
+                catImmunity: "🛡️ Иммунитет",
+                catEnergy: "⚡ Энергия",
+                catBones: "🦴 Кости & Зубы",
+                catBeauty: "✨ Кожа & Красота",
+                catBrain: "🧠 Мозг & Память",
+                quizTitle: "Витаминный Экспресс-Тест",
+                quizSubtitle: "Ответь на простой вопрос и узнай, какой витамин тебе сейчас нужен!",
+                quizQuestion: "Как ты себя чувствуешь в последнее время?",
+                qOpt1: "Постоянная усталость и слабость",
+                qOpt2: "Часто простужаюсь и болею",
+                qOpt3: "Сухая кожа или ломаются ногти",
+                qOpt4: "Стресс и плохой сон",
+                quizRetry: "Пройти снова 🔄",
+                trackerTitle: "Мои Заметки & Избранное",
+                trackerDesc: "Сохраняй витамины, чтобы не забыть принимать ежедневно!",
+                trackerEmpty: "У вас пока нет сохраненных витаминов 🌸",
+                modalBenefits: "Польза для здоровья:",
+                modalSources: "Природные источники:",
+                modalDeficiency: "Симптомы дефицита:",
+                modalDose: "Суточная норма:",
+                modalClose: "Понятно! ✨",
+                footerText: "❤️ Сделано с любовью к вашему здоровью. Контент носит ознакомительный характер.",
+                learnMore: "Подробнее ✨",
+                addFav: "В избранное ⭐",
+                removeFav: "Удалить ❌"
+            },
+            en: {
+                navCatalog: "Catalog",
+                navQuiz: "Vitamin Quiz",
+                navTracker: "My Tracker",
+                heroBadge: "Your cute vitamin guide!",
+                heroTitle1: "Stay energized &",
+                heroTitle2: "healthy every day! 🌸",
+                heroDesc: "Discover the superpowers of essential vitamins & minerals, find out what your body needs, and build healthy daily habits!",
+                searchPlaceholder: "Search vitamins (e.g., Vitamin C, Zinc)...",
+                catAll: "🌟 All",
+                catImmunity: "🛡️ Immunity",
+                catEnergy: "⚡ Energy",
+                catBones: "🦴 Bones & Teeth",
+                catBeauty: "✨ Skin & Beauty",
+                catBrain: "🧠 Brain & Focus",
+                quizTitle: "Vitamin Finder Quiz",
+                quizSubtitle: "Answer one simple question to find out which vitamin you might need!",
+                quizQuestion: "How have you been feeling lately?",
+                qOpt1: "Constantly tired and low energy",
+                qOpt2: "Catching colds frequently",
+                qOpt3: "Dry skin or brittle nails",
+                qOpt4: "High stress and poor sleep",
+                quizRetry: "Try Again 🔄",
+                trackerTitle: "My Saved Vitamins",
+                trackerDesc: "Bookmark your essential daily vitamins and keep track!",
+                trackerEmpty: "No saved vitamins yet 🌸",
+                modalBenefits: "Health Benefits:",
+                modalSources: "Food Sources:",
+                modalDeficiency: "Deficiency Symptoms:",
+                modalDose: "Daily Recommended Dose:",
+                modalClose: "Got it! ✨",
+                footerText: "❤️ Made with love for your health. For informational purposes only.",
+                learnMore: "Learn More ✨",
+                addFav: "Bookmark ⭐",
+                removeFav: "Remove ❌"
+            }
+        };
+
+        // Vitamins Master Data
+        const vitaminsData = [
+            {
+                id: 'vit-a',
+                emoji: '🥕',
+                category: 'beauty',
+                name: { ru: 'Витамин A', en: 'Vitamin A' },
+                shortDesc: { ru: 'Острое зрение, сияющая кожа и крепкий иммунитет.', en: 'Sharp vision, glowing skin, and a healthy immune system.' },
+                benefits: { ru: 'Поддерживает зрение, улучшает состояние кожи, ускоряет заживление.', en: 'Supports eye vision, enhances skin health, speeds up skin recovery.' },
+                sources: { ru: 'Морковь, тыква, батат, печень, шпинат, яичный желток.', en: 'Carrots, pumpkin, sweet potatoes, liver, spinach, egg yolks.' },
+                deficiency: { ru: 'Сухость глаз, "куриная слепота", шелушение кожи.', en: 'Dry eyes, night blindness, flaky skin.' },
+                dose: '700 - 900 mcg / день'
+            },
+            {
+                id: 'vit-b',
+                emoji: '🥑',
+                category: 'energy',
+                name: { ru: 'В-Комплекс', en: 'B-Complex' },
+                shortDesc: { ru: 'Заряд энергии, крепкие нервы и отличный обмен веществ.', en: 'Energy boost, strong nervous system, and healthy metabolism.' },
+                benefits: { ru: 'Превращает пищу в энергию, защищает от стресса, поддерживает мозг.', en: 'Converts food into energy, protects against stress, fuels brain power.' },
+                sources: { ru: 'Цельнозерновые крупы, бананы, орехи, курица, яйца.', en: 'Whole grains, bananas, nuts, chicken, eggs.' },
+                deficiency: { ru: 'Быстрая утомляемость, раздражительность, анемия.', en: 'Fatigue, irritability, brain fog, anemia.' },
+                dose: 'Зависит от типа B (B1-B12)'
+            },
+            {
+                id: 'vit-c',
+                emoji: '🍊',
+                category: 'immunity',
+                name: { ru: 'Витамин C', en: 'Vitamin C' },
+                shortDesc: { ru: 'Главный щит иммунитета и источник свежести.', en: 'The ultimate immune shield and antioxidant power.' },
+                benefits: { ru: 'Защищает от вирусов, выбатывает коллаген, помогает усвоению железа.', en: 'Shields against colds, promotes collagen synthesis, aids iron absorption.' },
+                sources: { ru: 'Апельсины, киви, болгарский перец, шиповник, клубника.', en: 'Oranges, kiwi, bell peppers, rosehips, strawberries.' },
+                deficiency: { ru: 'Частые простуды, кровоточивость десен, медленное заживление ран.', en: 'Frequent colds, bleeding gums, slow wound healing.' },
+                dose: '75 - 90 mg / день'
+            },
+            {
+                id: 'vit-d',
+                emoji: '☀️',
+                category: 'bones',
+                name: { ru: 'Витамин D3', en: 'Vitamin D3' },
+                shortDesc: { ru: 'Солнечный витамин для прочных костей и отличного настроения.', en: 'The sunshine vitamin for strong bones and cheerful mood.' },
+                benefits: { ru: 'Помогает усваивать кальций, укрепляет зубы и кости, поднимает настроение.', en: 'Helps absorb calcium, fortifies bones & teeth, boosts mood.' },
+                sources: { ru: 'Солнечный свет, жирная рыба (лосось), сливочное масло, желтки.', en: 'Sunlight, fatty fish (salmon), butter, egg yolks.' },
+                deficiency: { ru: 'Боль в суставах, частая грусть, слабость костей.', en: 'Joint pain, low mood, weakened bones.' },
+                dose: '600 - 2000 IU / день'
+            },
+            {
+                id: 'vit-e',
+                emoji: '🌻',
+                category: 'beauty',
+                name: { ru: 'Витамин E', en: 'Vitamin E' },
+                shortDesc: { ru: 'Эликсир молодости, красоты и защиты клеток.', en: 'Youth elixir protecting cells and skin vitality.' },
+                benefits: { ru: 'Сильный антиоксидант, питает кожу, защищает от старения.', en: 'Powerful antioxidant, nourishes skin, shields cells from aging.' },
+                sources: { ru: 'Миндаль, семечки подсолнуха, авокадо, оливковое масло.', en: 'Almonds, sunflower seeds, avocado, olive oil.' },
+                deficiency: { ru: 'Сухость кожи, слабость в мышцах, ломкие волосы.', en: 'Dry skin, muscle weakness, brittle hair.' },
+                dose: '15 mg / день'
+            },
+            {
+                id: 'zinc',
+                emoji: '🦪',
+                category: 'immunity',
+                name: { ru: 'Цинк (Zinc)', en: 'Zinc' },
+                shortDesc: { ru: 'Чистая кожа, заживление и мощная защита.', en: 'Clear skin, fast healing, and immune defense.' },
+                benefits: { ru: 'Борьба с акне, поддержка гормонального баланса и иммунитета.', en: 'Fights acne, balances hormones, strengthens natural immunity.' },
+                sources: { ru: 'Морепродукты, тыквенные семечки, нут, чечевица, орехи.', en: 'Seafood, pumpkin seeds, chickpeas, lentils, nuts.' },
+                deficiency: { ru: 'Выпадение волос, высыпания на коже, потеря вкусовых ощущений.', en: 'Hair loss, skin breakouts, reduced sense of taste.' },
+                dose: '8 - 11 mg / день'
+            },
+            {
+                id: 'magnesium',
+                emoji: '🍫',
+                category: 'brain',
+                name: { ru: 'Магний (Magnesium)', en: 'Magnesium' },
+                shortDesc: { ru: 'Спокойный сон, расслабление мышц и анти-стресс.', en: 'Calm mind, muscle relaxation, and deep sleep.' },
+                benefits: { ru: 'Снимает судороги, успокаивает нервную систему, улучшает сон.', en: 'Relieves cramps, soothes nervous system, improves sleep quality.' },
+                sources: { ru: 'Тёмный шоколад, шпинат, кешью, бананы, гречка.', en: 'Dark chocolate, spinach, cashews, bananas, buckwheat.' },
+                deficiency: { ru: 'Бессонница, тревожность, судороги в ногах.', en: 'Insomnia, anxiety, muscle twitches.' },
+                dose: '300 - 400 mg / день'
+            },
+            {
+                id: 'iron',
+                emoji: '🥩',
+                category: 'energy',
+                name: { ru: 'Железо (Iron)', en: 'Iron' },
+                shortDesc: { ru: 'Кислород для каждой клеточки и высокий уровень энергии.', en: 'Oxygen delivery to cells and endurance.' },
+                benefits: { ru: 'Помогает переносить кислород, предотвращает анемию и апатию.', en: 'Transports oxygen in blood, prevents anemia and lethargy.' },
+                sources: { ru: 'Красное мясо, яблоки, гранат, шпинат, гречка.', en: 'Red meat, apples, pomegranate, spinach, buckwheat.' },
+                deficiency: { ru: 'Бледность, головокружение, постоянная мерзлявость.', en: 'Pale skin, dizziness, feeling cold all the time.' },
+                dose: '8 - 18 mg / день'
+            }
+        ];
+
+        // State variables
+        let currentLang = 'ru';
+        let currentCategory = 'all';
+        let favoriteIds = JSON.parse(localStorage.getItem('vitavibe_favs') || '[]');
+
+        // Initialize App
+        window.onload = function() {
+            renderVitamins();
+            renderFavorites();
+            updateLanguageUI();
+        };
+
+        // Render Vitamin Cards
+        function renderVitamins() {
+            const grid = document.getElementById('vitaminGrid');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            
+            grid.innerHTML = '';
+
+            const filtered = vitaminsData.filter(v => {
+                const matchesCat = currentCategory === 'all' || v.category === currentCategory;
+                const matchesSearch = v.name[currentLang].toLowerCase().includes(searchVal) || 
+                                      v.shortDesc[currentLang].toLowerCase().includes(searchVal);
+                return matchesCat && matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400 font-semibold">🔍 Ничего не найдено / Nothing found</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const isFav = favoriteIds.includes(item.id);
+                const card = document.createElement('div');
+                card.className = "cute-card bg-white dark:bg-slate-800/90 rounded-3xl p-5 border border-pink-100 dark:border-slate-700/80 shadow-lg flex flex-col justify-between";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-4xl p-2 rounded-2xl bg-pink-50 dark:bg-slate-700/60">${item.emoji}</span>
+                            <button onclick="toggleFavorite('${item.id}')" class="text-xl hover:scale-125 transition-transform">
+                                ${isFav ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                        <h3 class="text-lg font-black mb-1">${item.name[currentLang]}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-300 leading-relaxed mb-4">${item.shortDesc[currentLang]}</p>
+                    </div>
+
+                    <button onclick="openModal('${item.id}')" class="w-full py-2.5 rounded-2xl bg-pink-100 hover:bg-pink-200 dark:bg-slate-700 dark:hover:bg-purple-900/60 text-pink-600 dark:text-purple-300 font-bold text-xs transition-colors flex items-center justify-center gap-1">
+                        ${translations[currentLang].learnMore}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Category Filter Setup
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.dataset.category === cat) {
+                    btn.className = "cat-btn active px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-500 text-white shadow-md";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all bg-pink-100 dark:bg-slate-700 hover:bg-pink-200 dark:hover:bg-slate-600 text-pink-600 dark:text-pink-300";
+                }
+            });
+            renderVitamins();
+        }
+
+        function filterVitamins() {
+            renderVitamins();
+        }
+
+        // Bookmark / Favorites Logic
+        function toggleFavorite(id) {
+            if(favoriteIds.includes(id)) {
+                favoriteIds = favoriteIds.filter(fId => fId !== id);
+            } else {
+                favoriteIds.push(id);
+            }
+            localStorage.setItem('vitavibe_favs', JSON.stringify(favoriteIds));
+            renderVitamins();
+            renderFavorites();
+        }
+
+        function renderFavorites() {
+            const favContainer = document.getElementById('favList');
+            const badge = document.getElementById('favCountBadge');
+            badge.innerText = favoriteIds.length;
+
+            favContainer.innerHTML = '';
+
+            if(favoriteIds.length === 0) {
+                favContainer.innerHTML = `<p class="col-span-full text-xs text-gray-400 italic">${translations[currentLang].trackerEmpty}</p>`;
+                return;
+            }
+
+            const favItems = vitaminsData.filter(v => favoriteIds.includes(v.id));
+            favItems.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "flex items-center justify-between p-3 rounded-2xl bg-pink-50/60 dark:bg-slate-900/50 border border-pink-100 dark:border-slate-700";
+                el.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${item.emoji}</span>
+                        <div>
+                            <h4 class="text-xs font-extrabold">${item.name[currentLang]}</h4>
+                            <span class="text-[10px] text-pink-500 font-bold">${item.dose}</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleFavorite('${item.id}')" class="text-xs text-red-400 hover:text-red-600 font-bold px-2 py-1">
+                        ✕
+                    </button>
+                `;
+                favContainer.appendChild(el);
+            });
+        }
+
+        // Modal Functionality
+        function openModal(id) {
+            const item = vitaminsData.find(v => v.id === id);
+            if(!item) return;
+
+            document.getElementById('modalEmoji').innerText = item.emoji;
+            document.getElementById('modalName').innerText = item.name[currentLang];
+            document.getElementById('modalCategory').innerText = item.category.toUpperCase();
+            document.getElementById('modalBenefitsText').innerText = item.benefits[currentLang];
+            document.getElementById('modalSourcesText').innerText = item.sources[currentLang];
+            document.getElementById('modalDeficiencyText').innerText = item.deficiency[currentLang];
+            document.getElementById('modalDoseText').innerText = item.dose;
+
+            const modal = document.getElementById('vitaminModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-95');
+            modal.children[0].classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('vitaminModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-100');
+            modal.children[0].classList.add('scale-95');
+        }
+
+        // Quiz Logic
+        function solveQuiz(type) {
+            const qContent = document.getElementById('quizContent');
+            const qResult = document.getElementById('quizResult');
+            const qIcon = document.getElementById('quizIcon');
+            const qTitle = document.getElementById('quizResultTitle');
+            const qDesc = document.getElementById('quizResultDesc');
+
+            if(type === 'fatigue') {
+                qIcon.innerText = '🥑';
+                qTitle.innerText = currentLang === 'ru' ? 'Вам нужен В-Комплекс & Железо!' : 'You need B-Complex & Iron!';
+                qDesc.innerText = currentLang === 'ru' ? 'Они восполнят запас энергии и снимут чувство постоянной усталости.' : 'They will replenish your energy and eliminate chronic fatigue.';
+            } else if(type === 'immunity') {
+                qIcon.innerText = '🍊';
+                qTitle.innerText = currentLang === 'ru' ? 'Вам нужен Витамин С & Цинк!' : 'You need Vitamin C & Zinc!';
+                qDesc.innerText = currentLang === 'ru' ? 'Это главные защитники иммунитета от вирусов и инфекций.' : 'These are the ultimate immunity shields against seasonal viruses.';
+            } else if(type === 'skin') {
+                qIcon.innerText = '🥕';
+                qTitle.innerText = currentLang === 'ru' ? 'Вам помогут Витамин А & Е!' : 'Vitamin A & E are for you!';
+                qDesc.innerText = currentLang === 'ru' ? 'Питают кожу изнутри, возвращают блеск волосам и укрепляют ногти.' : 'They nourish skin from within and restore healthy shine to hair and nails.';
+            } else {
+                qIcon.innerText = '🍫';
+                qTitle.innerText = currentLang === 'ru' ? 'Вам необходим Магний & D3!' : 'Magnesium & Vitamin D3 will help!';
+                qDesc.innerText = currentLang === 'ru' ? 'Снимут уровень стресса, расслабят мышцы и подарят крепкий сон.' : 'They ease stress, relax muscles, and promote sound sleep.';
+            }
+
+            qContent.classList.add('hidden');
+            qResult.classList.remove('hidden');
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizContent').classList.remove('hidden');
+            document.getElementById('quizResult').classList.add('hidden');
+        }
+
+        // Theme Toggle (Light / Dark)
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            
+            if(body.classList.contains('light')) {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                icon.className = "fa-solid fa-moon text-lg";
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                icon.className = "fa-solid fa-sun text-lg";
+            }
+        }
+
+        // Language Switcher Toggle
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            document.getElementById('currentLangLabel').innerText = currentLang.toUpperCase();
+            updateLanguageUI();
+            renderVitamins();
+            renderFavorites();
+        }
+
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if(translations[currentLang][key]) {
+                    el.placeholder = translations[currentLang][key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
